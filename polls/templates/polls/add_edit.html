@@ -1,0 +1,47 @@
+<style>
+    {% if theme == 'light' %}
+    body {
+        background-color: white;
+        color: #333;
+    }
+    a {
+        color: #007acc;
+    }
+    button {
+        background-color: #007acc;
+        color: white;
+    }
+    {% else %}
+    body {
+        background-color: #121212;
+        color: #eee;
+    }
+    a {
+        color: #00bfff;
+    }
+    button {
+        background-color: #00bfff;
+        color: white;
+    }
+    {% endif %}
+
+    body {
+        font-family: sans-serif;
+        padding: 2em;
+    }
+
+    button {
+        border: none;
+        padding: 0.5em 1em;
+        cursor: pointer;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: auto;
+    }
+</style>

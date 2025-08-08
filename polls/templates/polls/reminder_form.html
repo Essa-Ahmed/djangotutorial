@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Reminder Form</title>
+</head>
+<body>
+    <h1>{{ form.instance.pk|yesno:"Edit Reminder,Add Reminder" }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+    <a href="/polls/">← Back</a>
+</body>
+</html>

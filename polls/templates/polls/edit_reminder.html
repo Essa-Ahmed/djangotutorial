@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Reminder</title>
+    <style>
+        body {
+            background-color: {% if theme == 'light' %}white{% else %}#121212{% endif %};
+            color: {% if theme == 'light' %}#333{% else %}#eee{% endif %};
+            font-family: sans-serif;
+            padding: 2em;
+        }
+        input, textarea, button {
+            width: 100%;
+            margin: 1em 0;
+            padding: 0.7em;
+            border: none;
+        }
+        button {
+            background-color: {% if theme == 'light' %}#007acc{% else %}#00bfff{% endif %};
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Reminder</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+    <a href="{% url 'reminders_list' %}">← Back to list</a>
+</body>
+</html>

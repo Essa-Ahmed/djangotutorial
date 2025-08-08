@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Reminder</title>
+</head>
+<body>
+    <h1>Delete "{{ reminder.title }}"?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+    </form>
+    <a href="/polls/">Cancel</a>
+</body>
+</html>

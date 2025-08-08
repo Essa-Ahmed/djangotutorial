@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reminders</title>
+    <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+    <style>
+      body.light {
+        background-color: #f9f9f9;
+        color: #222;
+      }
+      body.dark {
+        background-color: #1e1e1e;
+        color: #eee;
+      }
+      a {
+        color: {% if theme == "dark" %}#aadcfb{% else %}#0055cc{% endif %};
+        text-decoration: none;
+        font-weight: bold;
+      }
+      .reminder-box {
+        background-color: {% if theme == "dark" %}#2a2a2a{% else %}#fff{% endif %};
+        padding: 1em;
+        margin: 1em 0;
+        border-radius: 6px;
+        box-shadow: {% if theme == "dark" %}none{% else %}0 0 8px #ccc{% endif %};
+      }
+    </style>
+</head>
+<body class="{{ theme }}">
+    <a href="{% url 'toggle_theme' %}">🌓 Toggle Theme</a>
+    <h1>My Reminders</h1>
+
+    {% if reminders %}
+      {% for reminder in reminders %}
+        <div class="reminder-box">
+          <strong>{{ reminder.title }}</strong>: {{ reminder.description }}<br>
+          📅 {{ reminder.date }} at 🕒 {{ reminder.time }}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No reminders yet.</p>
+    {% endif %}
+
+    <a href="{% url 'add_reminder' %}">➕ Add Reminder</a>
+</body>
+</html>
+
