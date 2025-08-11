@@ -27,7 +27,7 @@
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit">Save Event</button>
     </form>
     <a href="{% url 'reminders_list' %}">← Back to list</a>
 </body>
