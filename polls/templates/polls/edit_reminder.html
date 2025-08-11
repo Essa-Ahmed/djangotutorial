@@ -9,26 +9,33 @@
             font-family: sans-serif;
             padding: 2em;
         }
-        input, textarea, button {
+        input, textarea, select, button {
             width: 100%;
             margin: 1em 0;
             padding: 0.7em;
             border: none;
+            border-radius: 4px;
+            background-color: {% if theme == 'light' %}#f9f9f9{% else %}#1e1e1e{% endif %};
+            color: {% if theme == 'light' %}#000{% else %}#fff{% endif %};
         }
         button {
             background-color: {% if theme == 'light' %}#007acc{% else %}#00bfff{% endif %};
             color: white;
             cursor: pointer;
         }
+        a {
+            color: {% if theme == 'light' %}#007acc{% else %}#90caf9{% endif %};
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <h1>Edit Reminder</h1>
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Update</button>
     </form>
-    <a href="{% url 'reminders_list' %}">← Back to list</a>
+    <p><a href="{% url 'reminders_list' %}">← Back to list</a></p>
 </body>
 </html>

@@ -1,34 +1,109 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Reminders</title>
+    <style>
+        body {
+            background-color: {% if theme == 'dark' %}#121212{% else %}#f4f4f4{% endif %};
+            color: {% if theme == 'dark' %}#f4f4f4{% else %}#121212{% endif %};
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        a {
+            color: {% if theme == 'dark' %}#90caf9{% else %}#007bff{% endif %};
+        }
+        .reminder {
+            background-color: {% if theme == 'dark' %}#1e1e1e{% else %}white{% endif %};
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .legend {
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+        .legend span {
+            display: inline-block;
+            padding: 4px 8px;
+            margin-right: 10px;
+            border-radius: 4px;
+            color: white;
+        }
+    </style>
 </head>
-<body style="
-    background-color: {% if theme == 'dark' %}#121212{% else %}#f4f4f4{% endif %};
-    color: {% if theme == 'dark' %}white{% else %}#333{% endif %};
-    font-family: Arial, sans-serif;
-    padding: 20px;
-">
-    <a href="{% url 'toggle_theme' %}" style="text-decoration: none; padding: 8px 12px; background-color: {% if theme == 'dark' %}#333{% else %}#ddd{% endif %}; color: {% if theme == 'dark' %}white{% else %}black{% endif %}; border-radius: 5px;">
-        Switch to {% if theme == 'light' %}Dark{% else %}Light{% endif %} Mode
-    </a>
+<body>
+    <h1>Reminders</h1>
 
-    <h1>My Reminders</h1>
-    <ul>
-        {% for reminder in reminders %}
-            <li>
-                <strong>{{ reminder.title }}</strong><br>
-                {{ reminder.description }}<br>
-                {{ reminder.date }} at {{ reminder.time }}
-                <br>
-                <a href="{% url 'reminder_edit' reminder.pk %}">Edit</a> |
-                <a href="{% url 'reminder_delete' reminder.pk %}">Delete</a>
-            </li>
-        {% empty %}
-            <li>No reminders yet.</li>
-        {% endfor %}
-    </ul>
+    <div class="legend">
+        <strong>Color Legend:</strong>
+        <span style="background-color: #dc3545;">Today</span>
+        <span style="background-color: #fd7e14;">Next 3 Days</span>
+        <span style="background-color: #28a745;">Later</span>
+    </div>
 
-    <a href="{% url 'reminder_create' %}">Add New Reminder</a>
+    <form method="get" action="" style="margin-bottom: 20px;">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search reminders..." style="
+            padding: 8px;
+            width: 250px;
+            border: 1px solid {% if theme == 'dark' %}#555{% else %}#ccc{% endif %};
+            background-color: {% if theme == 'dark' %}#222{% else %}white{% endif %};
+            color: {% if theme == 'dark' %}white{% else %}black{% endif %};
+            border-radius: 4px;
+        ">
+        <button type="submit" style="
+            padding: 8px 12px;
+            background-color: {% if theme == 'dark' %}#444{% else %}#eee{% endif %};
+            color: {% if theme == 'dark' %}white{% else %}black{% endif %};
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        ">Search</button>
+    </form>
+
+    <p>
+        <a href="?sort=date">Sort by Date</a> |
+        <a href="?sort=title">Sort by Title</a> |
+        <a href="?filter=all">All</a> |
+        <a href="?filter=done">Done</a> |
+        <a href="?filter=upcoming">Upcoming</a> |
+        <a href="{% url 'toggle_theme' %}">Toggle Theme</a> |
+        <a href="{% url 'add_reminder' %}">Add Reminder</a>
+    </p>
+
+    {% for reminder in reminders %}
+        <div class="reminder" style="border-left: 8px solid {{ reminder.deadline_color }};">
+            <h3>
+                <span style="
+                    background-color: {{ reminder.category_color }};
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 4px;
+                    font-size: 0.8em;
+                    margin-right: 8px;
+                ">
+                    {{ reminder.get_category_display }}
+                </span>
+                {{ reminder.title }}
+            </h3>
+            <p>{{ reminder.description }}</p>
+            <p><strong>Date:</strong> {{ reminder.date }} | <strong>Time:</strong> {{ reminder.time }}</p>
+            <p><strong>Repeat:</strong> {{ reminder.get_repeat_display }}</p>
+            {% if reminder.attachment %}
+                <p><a href="{{ reminder.attachment.url }}" target="_blank">📎 View Attachment</a></p>
+            {% endif %}
+            {% if not reminder.is_done %}
+                <p><a href="{% url 'mark_done' reminder.id %}">✅ Mark as Done</a></p>
+            {% else %}
+                <p style="color: green;">✔️ Completed</p>
+            {% endif %}
+            <p>
+                <a href="{% url 'reminder_edit' reminder.id %}">✏️ Edit</a> |
+                <a href="{% url 'reminder_delete' reminder.id %}">🗑️ Delete</a>
+            </p>
+        </div>
+    {% empty %}
+        <p>No reminders found.</p>
+    {% endfor %}
 </body>
 </html>
